@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,11 +35,11 @@ public class FileHandlingController {
 	 * @throws IOException
 	 */
 	@PostMapping(value="/sourceFile")
-	public ResponseEntity<String> xyz(@RequestParam (required=true)String sourceFilelocation ,@RequestParam(required=false , defaultValue="${defalutDestinationFileLocation}") String destinationFilelocation ) throws IOException{
+	public ResponseEntity<String> xyz(@RequestParam (required=true)String sourceFilelocation ,@RequestParam(required=false , defaultValue="${defalutDestinationFileLocation}") String destinationFilelocation ) throws IOException {
 		log.info("**Inside file controller**sourceFilelocation ** "+sourceFilelocation);
 		log.info("**Inside file controller**destinationFilelocation ** "+destinationFilelocation);
-		if(null==destinationFilelocation){
-			return new ResponseEntity<String>("Please provide source file in request param..!",HttpStatus.EXPECTATION_FAILED);
+		if(null==sourceFilelocation){
+			return new ResponseEntity<String>("Please provide source file LOCATION in request param..!",HttpStatus.EXPECTATION_FAILED);
 		}
 		boolean status=fileHandlingService.readSourceFile(sourceFilelocation,destinationFilelocation);
 		 if(status){
@@ -45,4 +47,5 @@ public class FileHandlingController {
 		 }
 		 	return new ResponseEntity<String>("File not Created..!",HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
 }

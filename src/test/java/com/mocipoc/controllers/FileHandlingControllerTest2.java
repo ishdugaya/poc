@@ -1,14 +1,16 @@
 package com.mocipoc.controllers;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,7 +25,8 @@ import junit.framework.Assert;
 @SuppressWarnings("deprecation")
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = {FileHandlingController.class}, secure = false)
-public class FileHandlingControllerTest {
+@PrepareForTest({FileHandlingService.class})
+public class FileHandlingControllerTest2 {
 	
 	@Autowired
 	private MockMvc mockmvc;
@@ -37,11 +40,12 @@ public class FileHandlingControllerTest {
 	@Value("${destinationFile}")
 	private String destinationFile;
 	
-	/*@Before
+	@Before
 	public void setup(){
 		//mockmvc = MockMvcBuilders.standaloneSetup(fileHandlingController).setControllerAdvice(new ExceptionController()).build();
 		//Mockito.when(fileHandlingService.readSourceFile(Matchers.anyString(), Matchers.anyString())).thenReturn(HttpStatus.CREATED);
-	}*/
+		//powermocki
+	}
 	
 	
 	

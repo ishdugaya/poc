@@ -16,7 +16,7 @@ public class Main {
 		.map(orderLine -> orderLine.split("\\s"))
 		.map(orderArray -> new OrderModel(orderArray[0], orderArray[1]) )
 		.sorted()
-		.collect(Collectors.toList());
+		.collect(Collectors.toList()).forEach(System.out::println);;
 	}
 
 	public static Stream<String> readSourceFile(String sourceFile) throws IOException {

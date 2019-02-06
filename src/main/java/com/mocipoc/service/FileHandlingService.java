@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mocipoc.dao.FileReadWriteDao;
+import com.mocipoc.exception.FileNotFound;
 import com.mocipoc.model.OrderModel;
 import com.mocipoc.utils.Constants;
 
@@ -39,22 +40,28 @@ public class FileHandlingService {
 	 * @return Status 
 	 * @throws IOException
 	 */
-	public boolean readSourceFile(String sourceFile,String destinationFileLocation) throws IOException {
+	public boolean readSourceFile(String sourceFile,String destinationFileLocation)  {
 		List<OrderModel> sourceContentList=null;
 		
-		Stream<String> orderFileStream = fileReadWriteDao.readSourceFile(sourceFile);
-		
-		sourceContentList=	orderFileStream.skip(1)
-								.map(orderLine -> orderLine.split("\\s"))
-								.map(orderArray -> new OrderModel(orderArray[0], orderArray[1]/*getDatetimeFromEpoc(Long.parseLong(orderArray[1]))*/ ))
-								//.sorted()
-								.collect(Collectors.toList());
-		orderFileStream.close();
-		
-		log.debug("****sourceContentList**** " + sourceContentList);
-		
-		
-		return fileReadWriteDao.writeFile(prepareDestinationFileContent(sourceContentList),destinationFileLocation);
+		Stream<String> orderFileStream;
+		try {
+			orderFileStream = fileReadWriteDao.readSourceFile(sourceFile);
+				
+				
+				sourceContentList=	orderFileStream.skip(1)
+										.map(orderLine -> orderLine.trim().split("\\s+"))
+										.map(orderArray -> new OrderModel(orderArray[0], getDatetimeFromEpoc(Long.parseLong(orderArray[1])) ))
+										.sorted()
+										.collect(Collectors.toList());
+				orderFileStream.close();
+				
+				log.debug("****sourceContentList**** " + sourceContentList);
+				
+				
+				return fileReadWriteDao.writeFile(prepareDestinationFileContent(sourceContentList),destinationFileLocation);
+		} catch (IOException e) {
+			throw new FileNotFound("file not found");
+		}
 	}
 
 	
