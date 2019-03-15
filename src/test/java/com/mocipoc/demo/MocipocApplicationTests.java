@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MocipocApplicationTests {
 
 	@Test
-	public void add() {
+	public void added() {
 
 	}
 }
